@@ -24,7 +24,7 @@ Projects are configured to allow deployments **only to namespaces that end with*
 sync
 ```
 argocd login argocd.lan --username admin --password $ARGOCD_PASSWORD --grpc-web --insecure
-argocd repo add git@github.com:jvizueta/k8s-cluster-01-apps-default.git --ssh-private-key-path ~/.ssh/id_rsa
+argocd repo add git@github.com:JCTekDev/k8s-cluster-01-apps-default.git --ssh-private-key-path ~/.ssh/id_rsa
 ```
 
 

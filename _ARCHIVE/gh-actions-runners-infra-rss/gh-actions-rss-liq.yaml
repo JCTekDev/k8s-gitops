@@ -16,7 +16,7 @@ spec:
     targetRevision: "0.12.1"
     helm:
       values: |
-        githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
+        githubConfigUrl: https://github.com/JCTekDev/liq-r2-demo
         githubConfigSecret: gh-actions-app-credentials  # <- Secret con credenciales (paso 3)
         runnerScaleSetName: liq-rs                # <- Este nombre lo usarás en "runs-on"
         minRunners: 1

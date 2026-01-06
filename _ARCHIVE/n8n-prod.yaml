@@ -6,7 +6,7 @@ metadata:
 spec:
   project: prod
   source:
-    repoURL: git@github.com:jvizueta/k8s-manifests-private.git
+    repoURL: git@github.com:JCTekDev/k8s-manifests-private.git
     targetRevision: main
     path: n8n/overlays/prod
   destination:

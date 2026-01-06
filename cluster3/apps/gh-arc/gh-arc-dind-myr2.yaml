@@ -17,7 +17,7 @@ spec:
     targetRevision: "0.12.1"
     helm:
       values: |
-        githubConfigUrl: https://github.com/jvizueta/myr2
+        githubConfigUrl: https://github.com/JCTekDev/myr2
         githubConfigSecret: gh-actions-app-credentials
         runnerScaleSetName: cluster3-arc-dind-myr2
         minRunners: 2

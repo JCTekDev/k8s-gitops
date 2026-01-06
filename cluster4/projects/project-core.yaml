@@ -9,7 +9,7 @@ metadata:
 spec:
   description: Apps allowed to deploy into namespaces with any suffix
   sourceRepos:
-    - git@github.com:jvizueta/*   # Only repos under your GitHub starting with k8s-app-
+    - git@github.com:JCTekDev/*   # Only repos under your GitHub starting with k8s-app-
     - https://charts.bitnami.com/bitnami
     - https://kubernetes.github.io/ingress-nginx
     - https://charts.jetstack.io

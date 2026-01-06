@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default     # Root app runs under the default Argo CD project
   source:
-    repoURL: git@github.com:jvizueta/k8s-gitops.git  # This repo
+    repoURL: git@github.com:JCTekDev/k8s-gitops.git  # This repo
     targetRevision: main   # Branch to track
     path: cluster4         # Look at the whole repo
     directory:

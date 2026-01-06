@@ -17,7 +17,7 @@ spec:
     targetRevision: "0.12.1"
     helm:
       values: |
-        githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
+        githubConfigUrl: https://github.com/JCTekDev/liq-r2-demo
         githubConfigSecret: gh-actions-app-credentials
         runnerScaleSetName: cluster3-arc-k8s
         minRunners: 1

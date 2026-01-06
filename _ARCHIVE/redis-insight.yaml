@@ -6,7 +6,7 @@ metadata:
 spec:
   project: infra
   source:
-    repoURL: git@github.com:jvizueta/k8s-manifests-public.git
+    repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
     targetRevision: main
     path: redisinsight
   destination:

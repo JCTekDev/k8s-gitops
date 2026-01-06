@@ -8,7 +8,7 @@ metadata:
 spec:
   project: dev
   source:
-    repoURL: git@github.com:jvizueta/k8s-manifests-public.git
+    repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
     targetRevision: main
     path: ai-customer-service/counter-agent/overlays/dev
   destination:

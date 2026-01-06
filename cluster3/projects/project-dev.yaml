@@ -9,7 +9,7 @@ metadata:
 spec:
   description: Apps allowed to deploy into namespaces with -dev suffix
   sourceRepos:
-    - git@github.com:jvizueta/*
+    - git@github.com:JCTekDev/*
     - https://charts.bitnami.com/bitnami
     - https://kubernetes.github.io/ingress-nginx
     - https://community-charts.github.io/helm-charts
