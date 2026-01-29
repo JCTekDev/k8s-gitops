@@ -1,18 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: joget8-dev
+  name: liqdemo-dev
   namespace: argocd
 spec:
   project: dev
   source:
     repoURL: git@github.com:jctekdev/k8s-manifests-public.git
     targetRevision: main
-    path: joget8/overlays/dev
+    path: liqdemo/overlays/dev
   destination:
     server: https://kubernetes.default.svc
-    namespace: joget8-dev
+    namespace: liqdemo-dev
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

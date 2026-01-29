@@ -6,7 +6,7 @@ metadata:
 spec:
   project: dev
   source:
-    repoURL: git@github.com:jvizueta/k8s-manifests-private.git
+    repoURL: git@github.com:jctekdev/k8s-manifests-private.git
     targetRevision: main
     path: wsagentes/overlays/dev
   destination:
