@@ -10,7 +10,7 @@ spec:
     namespace: mysql-dev
   sources:
     # 1) Overlay Kustomize: aplica o Secret primeiro (wave -1)
-    - repoURL: git@github.com:jvizueta/k8s-manifests-private.git
+    - repoURL: git@github.com:JCTekDev/k8s-manifests-private.git
       targetRevision: main
       path: mysql/overlays/dev
       ref: values

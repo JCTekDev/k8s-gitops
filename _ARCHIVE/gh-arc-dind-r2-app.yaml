@@ -17,7 +17,7 @@ spec:
     targetRevision: "0.12.1"
     helm:
       values: |
-        githubConfigUrl: https://github.com/jvizueta/r2-app
+        githubConfigUrl: https://github.com/JCTekDev/r2-app
         githubConfigSecret: gh-actions-app-credentials
         runnerScaleSetName: cluster3-arc-dind-r2-app
         minRunners: 2

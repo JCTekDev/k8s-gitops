@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: counter-agent
+  name: ai-risk-analyzer
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-20"
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   project: dev
   source:
     repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
     targetRevision: main
-    path: ai-customer-service/counter-agent/overlays/dev
+    path: ai-risk-analyzer/overlays/dev
   destination:
     server: https://kubernetes.default.svc
-    namespace: ai-customer-service-dev
+    namespace: ai-risk-analyzer-dev
   syncPolicy:
     automated:
       prune: true

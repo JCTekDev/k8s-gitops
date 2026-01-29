@@ -9,7 +9,7 @@ metadata:
 spec:
   description: Apps allowed to deploy into namespaces with -dev suffix
   sourceRepos:
-    - git@github.com:jvizueta/*
+    - git@github.com:JCTekDev/*
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-dev" # Must end with -dev

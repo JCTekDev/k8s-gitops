@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: oracle-db-free-dev
   source:
-    repoURL: git@github.com:jvizueta/k8s-manifests-private
+    repoURL: git@github.com:JCTekDev/k8s-manifests-private
     targetRevision: main
     path: oracle-db-free/overlays/dev
   syncPolicy:

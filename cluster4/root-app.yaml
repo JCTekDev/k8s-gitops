@@ -1,0 +1,22 @@
+# This is the "App of Apps".
+# It tells Argo CD to look inside this repo and automatically create/manage all apps defined here.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-app
+  namespace: argocd    # Argo CD must run in this namespace
+spec:
+  project: default     # Root app runs under the default Argo CD project
+  source:
+    repoURL: git@github.com:JCTekDev/k8s-gitops.git  # This repo
+    targetRevision: main   # Branch to track
+    path: cluster4         # Look at the whole repo
+    directory:
+      recurse: true        # Pick up all subfolders (projects/, apps/, etc.)
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true          # Remove resources if deleted in Git
+      selfHeal: true       # Fix drift automatically
