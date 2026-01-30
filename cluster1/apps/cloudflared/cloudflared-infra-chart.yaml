@@ -14,7 +14,7 @@ spec:
     helm:
       values: |
         tunnelConfig:
-            name: "cluster3"
+            name: "cluster1"
             logLevel: "info"
             protocol: "auto"
             retries: 5
