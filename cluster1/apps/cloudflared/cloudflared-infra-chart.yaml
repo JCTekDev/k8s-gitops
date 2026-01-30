@@ -28,9 +28,7 @@ spec:
             name: "cloudflared-credentials"
             key: "credentials.json"
         ingress:
-          - hostname: counter-agent-dev.devopian.com
-            service: http://counter-agent.ai-customer-service-dev.svc.cluster.local:80
-          - hostname: argocd-dev.devopian.com
+          - hostname: argocd1.devopian.com
             service: http://argocd-server.argocd.svc.cluster.local:80
           - service: http_status:404
   destination:
