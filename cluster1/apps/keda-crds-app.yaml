@@ -9,9 +9,10 @@ spec:
     repoURL: https://github.com/kedacore/keda
     targetRevision: v2.19.0
     path: config/crd
+    plugin:
+      name: raw
     directory:
       recurse: true
-      exclude: '*.kustomization.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
