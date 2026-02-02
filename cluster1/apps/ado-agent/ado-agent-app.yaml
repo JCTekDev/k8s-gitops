@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ado-agent
+  namespace: argocd
+spec:
+  project: infra
+  source:
+    repoURL: git@github.com:jctekdev/k8s-manifests-public.git
+    targetRevision: main
+    path: ado-agent
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ado-agent-infra
+    createNamespace: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
