@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keda-crds
+  namespace: argocd
+spec:
+  project: infra
+  source:
+    repoURL: https://github.com/kedacore/keda
+    targetRevision: v2.19.0
+    path: config/crd
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+      - Replace=false
