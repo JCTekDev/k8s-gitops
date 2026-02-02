@@ -10,7 +10,21 @@ spec:
     repoURL: https://kedacore.github.io/charts
     targetRevision: 2.19.0
     helm:
-      skipCrds: false
+      valuesObject:
+        serviceAccount:
+          annotations:
+            eks.amazonaws.com/role-arn: ""
+        operator:
+          replicaCount: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+        logging:
+          level: info
   destination:
     server: https://kubernetes.default.svc
     namespace: keda
@@ -20,4 +34,3 @@ spec:
       - CreateNamespace=true
       - ServerSideApply=true
       - Replace=true
-  syncWave: 1
