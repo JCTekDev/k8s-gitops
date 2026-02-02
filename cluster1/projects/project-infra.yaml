@@ -17,6 +17,7 @@ spec:
     - https://charts.longhorn.io
     - https://community-charts.github.io/helm-charts
     - https://kedacore.github.io/charts
+    - https://github.com/kedacore/keda
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra
