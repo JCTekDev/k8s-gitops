@@ -27,7 +27,7 @@ spec:
           level: info
   destination:
     server: https://kubernetes.default.svc
-    namespace: keda
+    namespace: keda-infra
   syncPolicy:
     automated: {}
     syncOptions:
