@@ -18,3 +18,4 @@ spec:
     syncOptions:
       - ServerSideApply=true
       - Replace=false
+  syncWave: 0
