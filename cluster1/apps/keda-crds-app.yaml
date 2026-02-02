@@ -11,7 +11,7 @@ spec:
     path: config/crd
     directory:
       recurse: true
-      exclude: 'kustomization.yaml'
+      exclude: '*.kustomization.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
