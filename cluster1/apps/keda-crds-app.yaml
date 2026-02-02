@@ -11,8 +11,6 @@ spec:
     path: config/crd
     plugin:
       name: raw
-    directory:
-      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
