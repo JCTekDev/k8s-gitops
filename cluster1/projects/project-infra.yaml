@@ -10,6 +10,7 @@ spec:
   description: Apps allowed to deploy into namespaces with -infra suffix
   sourceRepos:
     - git@github.com:JCTekDev/*
+    - git@github.com:kedacore/*
     - https://charts.bitnami.com/bitnami
     - https://kubernetes.github.io/ingress-nginx
     - https://actions-runner-controller.github.io/actions-runner-controller
@@ -17,7 +18,7 @@ spec:
     - https://charts.longhorn.io
     - https://community-charts.github.io/helm-charts
     - https://kedacore.github.io/charts
-    - https://github.com/kedacore/keda
+    - https://github.com/kedacore/*
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra
