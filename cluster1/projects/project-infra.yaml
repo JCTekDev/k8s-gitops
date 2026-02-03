@@ -19,6 +19,7 @@ spec:
     - https://community-charts.github.io/helm-charts
     - https://kedacore.github.io/charts
     - https://github.com/kedacore/*
+    - https://cloudnative-pg.github.io/charts
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra
