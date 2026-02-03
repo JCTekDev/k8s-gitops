@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: azp-agent
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   project: infra
   source:
@@ -23,6 +25,3 @@ spec:
       kind: Deployment
       jsonPointers:
         - /spec/replicas
-dependsOn:
-  - name: azp-agent-secrets
-    namespace: argocd
