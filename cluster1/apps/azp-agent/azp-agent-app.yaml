@@ -1,19 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ado-agent
+  name: azp-agent
   namespace: argocd
 spec:
   project: infra
   source:
     repoURL: git@github.com:jctekdev/k8s-manifests-public.git
     targetRevision: main
-    path: ado-agent
+    path: azp-agent
   destination:
     server: https://kubernetes.default.svc
-    namespace: ado-agent-infra
+    namespace: azp-agent-infra
   syncPolicy:
-    automated:
       prune: true
       selfHeal: true
     syncOptions:
