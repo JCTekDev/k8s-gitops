@@ -21,4 +21,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
   revisionHistoryLimit: 3
