@@ -23,7 +23,7 @@ spec:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra
     - server: '*'
-      namespace: kube-system  # Allow kube-system for infra apps
+      namespace: "*-system"  # Allow kube-system for infra apps
   orphanedResources:
     warn: true           # Warn if resources are unmanaged
   clusterResourceWhitelist:
