@@ -6,7 +6,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  project: infra
+  project: default
   source:
     repoURL: https://cloudnative-pg.github.io/charts
     chart: cloudnative-pg
