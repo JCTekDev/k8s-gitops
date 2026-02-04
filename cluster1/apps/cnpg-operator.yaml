@@ -3,24 +3,28 @@ kind: Application
 metadata:
   name: cnpg-operator
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
+  labels:
+    app.kubernetes.io/name: cnpg-operator
 spec:
-  project: infra
-  source:
-    repoURL: https://cloudnative-pg.github.io/charts
-    chart: cloudnative-pg
-    targetRevision: 0.27.0
-    helm:
-      releaseName: cnpg
-      valuesObject:
-        replicaCount: 1
+  project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: cnpg-infra
+    namespace: cnpg-system
+  source:
+    repoURL: https://github.com/cloudnative-pg/artifacts
+    # Fija la versión menor que quieras gestionar (p.ej., release-1.27).
+    # Así controlas upgrades dentro de esa menor con PRs revisados.
+    targetRevision: release-1.27
+    path: manifests
+    directory:
+      recurse: true
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      # Útil en operadores/CRDs para evitar sobrescribir innecesario
+      - ApplyOutOfSyncOnly=true
+      # Server-side apply suele ir mejor con CRDs grandes
+      - ServerSideApply=true
