@@ -12,7 +12,7 @@ spec:
     chart: cloudnative-pg
     targetRevision: 0.22.1
     helm:
-      values: |
+      valuesObject:
         replicaCount: 1
   destination:
     server: https://kubernetes.default.svc
