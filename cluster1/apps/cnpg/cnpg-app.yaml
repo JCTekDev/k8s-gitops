@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cnpg
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: infra
+  source:
+    repoURL: git@github.com:jctekdev/k8s-manifests-public.git
+    targetRevision: main
+    path: cnpg
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: postgres-infra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  revisionHistoryLimit: 3
+  ignoreDifferences:
+    - group: postgresql.cnpg.io
+      kind: Cluster
+      jsonPointers:
+        - /status
