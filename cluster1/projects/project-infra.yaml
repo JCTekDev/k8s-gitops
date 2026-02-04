@@ -20,6 +20,7 @@ spec:
     - https://kedacore.github.io/charts
     - https://github.com/kedacore/*
     - https://cloudnative-pg.github.io/charts
+    - https://github.com/cloudnative-pg/*
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra
