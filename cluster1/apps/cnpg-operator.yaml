@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     app.kubernetes.io/name: cnpg-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   destination:
