@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudbeaver
+  namespace: argocd
+spec:
+  project: infra
+  source:
+    chart: cloudbeaver
+    repoURL: https://charts.avisto.ch
+    targetRevision: 0.9.0
+    helm:
+      valuesObject:
+        replicaCount: 1
+        
+        image:
+          repository: dbeaver/cloudbeaver
+          tag: "latest"
+          pullPolicy: IfNotPresent
+        
+        service:
+          type: ClusterIP
+          port: 8978
+          targetPort: 8978
+        
+        ingress:
+          enabled: false
+          # Uncomment and configure if you want Ingress
+          # className: "nginx"
+          # hosts:
+          #   - host: cloudbeaver.intra.local
+          #     paths:
+          #       - path: /
+          #         pathType: Prefix
+        
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        
+        persistence:
+          enabled: true
+          size: 128Mi
+          storageClassName: ""  # Use default storage class
+          accessModes:
+            - ReadWriteOnce
+          annotations: {}
+          # existingClaim: ""  # Use existing PVC instead of creating new one
+          mountPath: /opt/cloudbeaver/workspace
+          subPath: ""
+        
+        autoscaling:
+          enabled: false
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cloudbeaver-infra
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
