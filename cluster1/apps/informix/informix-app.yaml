@@ -9,9 +9,9 @@ spec:
   project: infra
 
   source:
-    repoURL: https://raw.githubusercontent.com/IBM/charts/master/repo/community
+    repoURL: https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm
     chart: ibm-informix-dev
-    targetRevision: "*"
+    targetRevision: "4.0.0"
     helm:
       valuesObject:
         license: accept
