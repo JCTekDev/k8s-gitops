@@ -15,6 +15,7 @@ spec:
     helm:
       releaseName: informix
       valuesObject:
+        installCRDs: true
         global:
           operatorNamespace: informix-infra
         license: accept
