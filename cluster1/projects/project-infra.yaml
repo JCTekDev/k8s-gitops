@@ -22,6 +22,7 @@ spec:
     - https://cloudnative-pg.github.io/charts
     - https://charts.avisto.ch
     - https://charts.jenkins.io
+    - https://raw.githubusercontent.com/IBM/charts/master/repo/community
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra
