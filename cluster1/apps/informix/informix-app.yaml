@@ -10,8 +10,8 @@ spec:
 
   source:
     repoURL: https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm
-    chart: ibm-informix-dev
-    targetRevision: "4.0.0"
+    chart: informix
+    targetRevision: "10.0.0+20251212.151737.14"
     helm:
       valuesObject:
         license: accept
