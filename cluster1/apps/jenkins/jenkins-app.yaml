@@ -15,7 +15,8 @@ spec:
     helm:
       valuesObject:
         controller:
-          adminSecret: true
+          admin:
+            createSecret: false
           installPlugins:
             - kubernetes:latest
             - workflow-aggregator:latest
