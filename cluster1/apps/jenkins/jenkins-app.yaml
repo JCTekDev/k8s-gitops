@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: jenkins
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: infra
 
@@ -13,12 +15,16 @@ spec:
     helm:
       valuesObject:
         controller:
-          admin.username: admin
-          admin.password: admin
-          service.type: ClusterIP
+          adminSecret: true
+          installPlugins:
+            - kubernetes:latest
+            - workflow-aggregator:latest
+            - git:latest
+          service:
+            type: ClusterIP
         persistence:
           enabled: true
-          size: 256Mi
+          size: 1Gi
   destination:
     server: https://kubernetes.default.svc
     namespace: jenkins-infra
