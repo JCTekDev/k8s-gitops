@@ -13,8 +13,8 @@ spec:
     chart: informix
     targetRevision: "10.0.0+20251212.151737.14"
     helm:
+      releaseName: informix
       valuesObject:
-        fullnameOverride: informix
         license: accept
         image:
           repository: icr.io/informix/informix-developer
