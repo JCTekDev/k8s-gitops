@@ -15,8 +15,8 @@ spec:
     helm:
       releaseName: informix
       valuesObject:
-        operator:
-          name: informix-operator
+        global:
+          operatorNamespace: informix-infra
         license: accept
         image:
           repository: icr.io/informix/informix-developer
