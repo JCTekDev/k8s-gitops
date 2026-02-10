@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: informix
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: infra
+
+  source:
+    repoURL: https://raw.githubusercontent.com/IBM/charts/master/repo/stable
+    chart: informix
+    targetRevision: "*"
+    helm:
+      valuesObject:
+        license: accept
+        image:
+          repository: icr.io/informix/informix-developer
+          tag: latest
+        persistence:
+          enabled: true
+          size: 512Mi
+          storageClass: standard
+        service:
+          type: ClusterIP
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: informix
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
