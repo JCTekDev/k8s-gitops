@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: infra
+
+  source:
+    repoURL: https://charts.jenkins.io
+    chart: jenkins
+    targetRevision: 5.8.4
+    helm:
+      valuesObject:
+        controller:
+          adminUser: admin
+          adminPassword: admin
+          serviceType: ClusterIP
+        persistence:
+          enabled: true
+          size: 8Gi
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jenkins-infra
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
