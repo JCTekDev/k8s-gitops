@@ -9,8 +9,8 @@ spec:
   project: infra
 
   source:
-    repoURL: https://raw.githubusercontent.com/IBM/charts/master/repo/stable
-    chart: informix
+    repoURL: https://raw.githubusercontent.com/IBM/charts/master/repo/community
+    chart: ibm-informix-dev
     targetRevision: "*"
     helm:
       valuesObject:
@@ -26,7 +26,7 @@ spec:
           type: ClusterIP
   destination:
     server: https://kubernetes.default.svc
-    namespace: informix
+    namespace: informix-infra
 
   syncPolicy:
     automated:
