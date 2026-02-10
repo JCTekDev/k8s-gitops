@@ -15,7 +15,6 @@ spec:
     helm:
       releaseName: informix
       valuesObject:
-        installCRDs: true
         global:
           operatorNamespace: informix-infra
         license: accept
@@ -38,3 +37,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - Replace=true
+      - ServerSideApply=true
