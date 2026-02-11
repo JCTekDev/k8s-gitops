@@ -21,6 +21,12 @@ spec:
             - kubernetes:latest
             - workflow-aggregator:latest
             - git:latest
+          containerEnv:
+            - name: GIT_SSH_COMMAND
+              value: "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+          volumeMounts:
+            - name: ssh-dir
+              mountPath: /root/.ssh
           servicePort: 8080
           targetPort: 8080
           agentListenerEnabled: false
@@ -29,9 +35,29 @@ spec:
             - name: agent-listener
               port: 50000
               targetPort: 50000
+          initContainers: |
+            - name: ssh-setup
+              image: alpine:latest
+              command:
+                - sh
+                - -c
+                - |
+                  apk add --no-cache openssh-client
+                  mkdir -p /root/.ssh
+                  echo "Host *" > /root/.ssh/config
+                  echo "  StrictHostKeyChecking no" >> /root/.ssh/config
+                  echo "  UserKnownHostsFile=/dev/null" >> /root/.ssh/config
+                  chmod 600 /root/.ssh/config
+                  ssh-keyscan -t rsa,ed25519 gitlab.com >> /root/.ssh/known_hosts 2>/dev/null || true
+              volumeMounts:
+                - name: ssh-dir
+                  mountPath: /root/.ssh
         persistence:
           enabled: true
           size: 1Gi
+        volumes:
+          - name: ssh-dir
+            emptyDir: {}
   destination:
     server: https://kubernetes.default.svc
     namespace: jenkins-infra
