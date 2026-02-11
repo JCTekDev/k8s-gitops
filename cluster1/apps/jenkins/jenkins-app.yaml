@@ -21,9 +21,10 @@ spec:
             - kubernetes:latest
             - workflow-aggregator:latest
             - git:latest
-          service:
-            type: ClusterIP
-            agentListenerPort: 50000
+          servicePort: 8080
+          targetPort: 8080
+          agentListenerEnabled: true
+          agentListenerPort: 50000
         persistence:
           enabled: true
           size: 1Gi
