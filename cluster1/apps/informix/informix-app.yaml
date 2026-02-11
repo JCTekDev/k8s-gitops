@@ -9,24 +9,9 @@ spec:
   project: infra
 
   source:
-    repoURL: https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm
-    chart: informix
-    targetRevision: "10.0.0+20251212.151737.14"
-    helm:
-      releaseName: informix
-      valuesObject:
-        global:
-          operatorNamespace: informix-infra
-        license: accept
-        image:
-          repository: icr.io/informix/informix-developer
-          tag: latest
-        persistence:
-          enabled: true
-          size: 512Mi
-          storageClass: standard
-        service:
-          type: ClusterIP
+    repoURL: git@github.com:jctekdev/k8s-manifests-public.git
+    targetRevision: main
+    path: informix
   destination:
     server: https://kubernetes.default.svc
     namespace: informix-infra
@@ -37,5 +22,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - Replace=true
       - ServerSideApply=true
