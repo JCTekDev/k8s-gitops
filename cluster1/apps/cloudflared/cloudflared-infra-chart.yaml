@@ -30,6 +30,10 @@ spec:
         ingress:
           - hostname: argocd1.devopian.com
             service: http://argocd-server.argocd.svc.cluster.local:80
+          - hostname: jenkins1.devopian.com
+            service: http://jenkins.jenkins-infra.svc.cluster.local:8080
+          - hostname: cloudbeaver1.devopian.com
+            service: http://cloudbeaver.cloudbeaver-infra.svc.cluster.local:8080
           - service: http_status:404
   destination:
     server: https://kubernetes.default.svc
