@@ -23,8 +23,12 @@ spec:
             - git:latest
           servicePort: 8080
           targetPort: 8080
-          agentListenerEnabled: true
+          agentListenerEnabled: false
           agentListenerPort: 50000
+          extraPorts:
+            - name: agent-listener
+              port: 50000
+              targetPort: 50000
         persistence:
           enabled: true
           size: 1Gi
