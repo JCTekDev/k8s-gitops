@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
     targetRevision: main
-    path: joget8/overlays/dev2
+    path: joget8/overlays/dev827
   destination:
     server: https://kubernetes.default.svc
     namespace: joget827-dev
