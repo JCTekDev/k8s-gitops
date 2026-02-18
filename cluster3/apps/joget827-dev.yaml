@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: joget827-dev
+  namespace: argocd
+spec:
+  project: dev
+  source:
+    repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
+    targetRevision: main
+    path: joget8/overlays/dev2
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: joget827-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true       # cria o namespace se não existir
+      - ApplyOutOfSyncOnly=true    # aplica somente o que está fora de sync
