@@ -23,6 +23,8 @@ spec:
                   envFrom:
                     - secretRef:
                         name: liquibot-env-secret
+                chromium:
+                  enabled: false
 
           configMaps:
             config:
