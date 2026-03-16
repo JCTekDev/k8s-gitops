@@ -23,6 +23,7 @@ spec:
     - https://charts.avisto.ch
     - https://charts.jenkins.io
     - https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm
+    - https://serhanekicii.github.io/openclaw-helm
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra

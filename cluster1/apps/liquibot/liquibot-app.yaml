@@ -1,0 +1,101 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: liquibot
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: prod
+  source:
+    repoURL: https://serhanekicii.github.io/openclaw-helm
+    chart: openclaw
+    targetRevision: 1.5.3
+    helm:
+      valuesObject:
+        configMode: "overwrite"
+
+        app-template:
+          controllers:
+            main:
+              containers:
+                main:
+                  envFrom:
+                    - secretRef:
+                        name: liquibot-env-secret
+
+          configMaps:
+            config:
+              data:
+                "openclaw.json": |
+                  {
+                    gateway: {
+                      port: 18789,
+                      mode: "local",
+                    },
+                    browser: {
+                      enabled: true,
+                      defaultProfile: "default",
+                      profiles: {
+                        default: { cdpUrl: "http://localhost:9222" },
+                      },
+                    },
+                    agents: {
+                      defaults: {
+                        workspace: "/home/node/.openclaw/workspace",
+                        model: {
+                          primary: "anthropic/claude-sonnet-4-6",
+                        },
+                        userTimezone: "UTC",
+                        timeoutSeconds: 600,
+                        maxConcurrent: 1,
+                      },
+                      list: [
+                        {
+                          id: "main",
+                          default: true,
+                          identity: {
+                            name: "Liqui",
+                            emoji: "💧",
+                            description: "Liquibase support engineer — helps with migrations, changelogs, and database schema versioning.",
+                          },
+                        },
+                      ],
+                    },
+                    session: {
+                      scope: "per-sender",
+                      store: "/home/node/.openclaw/sessions",
+                      reset: {
+                        mode: "idle",
+                        idleMinutes: 60,
+                      },
+                    },
+                    logging: {
+                      level: "info",
+                      consoleLevel: "info",
+                      consoleStyle: "compact",
+                      redactSensitive: "tools",
+                    },
+                    tools: {
+                      profile: "full",
+                      web: {
+                        search: { enabled: false },
+                        fetch: { enabled: true },
+                      },
+                    },
+                    channels: {
+                      slack: { botToken: process.env.SLACK_BOT_TOKEN, appToken: process.env.SLACK_APP_TOKEN },
+                    },
+                  }
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: liquibot-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 3
