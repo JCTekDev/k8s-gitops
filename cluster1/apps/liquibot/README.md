@@ -6,6 +6,7 @@ AI assistant specialised in Liquibase migrations, changelogs, and database schem
 - **ArgoCD project:** `prod`
 - **Chart:** `openclaw` `1.5.3` — `https://serhanekicii.github.io/openclaw-helm`
 - **Channel:** Slack
+- **Embedded browser:** Disabled (`browser.enabled: false`) to avoid headless-shell container runtime errors
 
 ---
 
@@ -54,3 +55,7 @@ Once paired, communication between Slack and the agent flows entirely through th
 
 Edit `targetRevision` in `liquibot-app.yaml` and push.
 Latest releases: https://github.com/serhanekicii/openclaw-helm/releases
+
+## Troubleshooting
+
+If you see errors from `headless-shell` (OOM score / shared memory descriptor lookup), keep the embedded browser disabled in `liquibot-app.yaml`. Re-enable it only if your agent explicitly needs browser automation tools.

@@ -34,7 +34,7 @@ spec:
                       mode: "local",
                     },
                     browser: {
-                      enabled: true,
+                      enabled: false,
                       defaultProfile: "default",
                       profiles: {
                         default: { cdpUrl: "http://localhost:9222" },
