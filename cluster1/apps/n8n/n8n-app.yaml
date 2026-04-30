@@ -48,11 +48,12 @@ spec:
               host: n8n.lan
               protocol: https
               editor_base_url: https://n8n.lan/
-          secret:
-            n8n:
-              # TODO: replace with a strong random key and store in a sealed secret
-              encryption_key: "<your-secure-encryption-key>"
           extraEnv:
+            N8N_ENCRYPTION_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-encryption-key
+                  key: encryption_key
             DB_POSTGRESDB_PASSWORD:
               valueFrom:
                 secretKeyRef:
