@@ -1,0 +1,109 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: n8n
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: infra
+  source:
+    repoURL: oci://8gears.container-registry.com/library
+    chart: n8n
+    targetRevision: 2.0.1
+    helm:
+      values: |
+        image:
+          repository: n8nio/n8n
+          tag: ""
+
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            nginx.ingress.kubernetes.io/proxy-buffering: "off"
+            nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
+          hosts:
+            - host: n8n.lan
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - secretName: n8n-tls
+              hosts:
+                - n8n.lan
+
+        main:
+          config:
+            db:
+              type: postgresdb
+              postgresdb:
+                host: n8n-db-rw
+                user: n8n
+                pool:
+                  size: 10
+            n8n:
+              host: n8n.lan
+              protocol: https
+              editor_base_url: https://n8n.lan/
+          secret:
+            n8n:
+              # TODO: replace with a strong random key and store in a sealed secret
+              encryption_key: "<your-secure-encryption-key>"
+          extraEnv:
+            DB_POSTGRESDB_PASSWORD:
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-db-app
+                  key: password
+          persistence:
+            enabled: true
+            type: dynamic
+            storageClass: local-path
+            size: 1Gi
+          resources:
+            limits:
+              memory: 2048Mi
+            requests:
+              memory: 512Mi
+
+        # Dedicated CNPG cluster for n8n
+        # CNPG operator creates secret n8n-db-app with keys: username, password, host, dbname
+        extraManifests:
+          - apiVersion: postgresql.cnpg.io/v1
+            kind: Cluster
+            metadata:
+              name: n8n-db
+            spec:
+              instances: 1
+              bootstrap:
+                initdb:
+                  database: n8n
+                  owner: n8n
+              postgresql:
+                parameters:
+                  shared_buffers: "64MB"
+                  effective_cache_size: "128MB"
+                pg_hba:
+                  - host all all all trust
+              resources:
+                requests:
+                  memory: "512Mi"
+                limits:
+                  memory: "512Mi"
+              storage:
+                size: 1Gi
+                storageClass: local-path
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: n8n-infra
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
