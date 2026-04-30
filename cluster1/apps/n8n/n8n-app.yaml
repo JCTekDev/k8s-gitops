@@ -12,7 +12,7 @@ spec:
     chart: n8n
     targetRevision: 2.0.1
     helm:
-      values: |
+      valuesObject:
         image:
           repository: n8nio/n8n
           tag: ""
