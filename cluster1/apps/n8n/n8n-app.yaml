@@ -60,6 +60,12 @@ spec:
                 secretKeyRef:
                   name: n8n-db-app
                   key: password
+            N8N_RUNNERS_ENABLED:
+              value: "true"
+            N8N_BLOCK_ENV_ACCESS_IN_NODE:
+              value: "false"
+            N8N_GIT_NODE_DISABLE_BARE_REPOS:
+              value: "true"
           persistence:
             enabled: true
             type: dynamic
