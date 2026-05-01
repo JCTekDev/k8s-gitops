@@ -15,7 +15,7 @@ spec:
       valuesObject:
         image:
           repository: n8nio/n8n
-          tag: ""
+          tag: "2.18.5"
 
         # ingress is handled by Cloudflare Tunnel (n8n.devopian.com -> n8n.n8n-infra:5678)
         # ingress:
