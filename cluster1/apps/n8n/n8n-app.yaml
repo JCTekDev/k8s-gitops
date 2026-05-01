@@ -26,14 +26,14 @@ spec:
             nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
             nginx.ingress.kubernetes.io/ssl-redirect: "true"
           hosts:
-            - host: n8n.lan
+            - host: n8n.devopian.com
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - secretName: n8n-tls
               hosts:
-                - n8n.lan
+                - n8n.devopian.com
 
         main:
           config:
@@ -45,9 +45,9 @@ spec:
                 pool:
                   size: 10
             n8n:
-              host: n8n.lan
+              host: n8n.devopian.com
               protocol: https
-              editor_base_url: https://n8n.lan/
+              editor_base_url: https://n8n.devopian.com/
           extraEnv:
             N8N_ENCRYPTION_KEY:
               valueFrom:
