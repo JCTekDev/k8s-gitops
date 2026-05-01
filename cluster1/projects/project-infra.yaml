@@ -24,6 +24,7 @@ spec:
     - https://charts.jenkins.io
     - https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm
     - https://serhanekicii.github.io/openclaw-helm
+    - oci://8gears.container-registry.com/library
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra
