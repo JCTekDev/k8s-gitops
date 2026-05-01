@@ -17,23 +17,24 @@ spec:
           repository: n8nio/n8n
           tag: ""
 
-        ingress:
-          enabled: true
-          className: nginx
-          annotations:
-            nginx.ingress.kubernetes.io/proxy-body-size: "0"
-            nginx.ingress.kubernetes.io/proxy-buffering: "off"
-            nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
-            nginx.ingress.kubernetes.io/ssl-redirect: "true"
-          hosts:
-            - host: n8n.devopian.com
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - secretName: n8n-tls
-              hosts:
-                - n8n.devopian.com
+        # ingress is handled by Cloudflare Tunnel (n8n.devopian.com -> n8n.n8n-infra:5678)
+        # ingress:
+        #   enabled: true
+        #   className: nginx
+        #   annotations:
+        #     nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        #     nginx.ingress.kubernetes.io/proxy-buffering: "off"
+        #     nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+        #     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        #   hosts:
+        #     - host: n8n.devopian.com
+        #       paths:
+        #         - path: /
+        #           pathType: Prefix
+        #   tls:
+        #     - secretName: n8n-tls
+        #       hosts:
+        #         - n8n.devopian.com
 
         main:
           config:
