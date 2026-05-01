@@ -35,7 +35,7 @@ spec:
           - hostname: cloudbeaver1.devopian.com
             service: http://cloudbeaver.cloudbeaver-infra.svc.cluster.local:8978
           - hostname: n8n.devopian.com
-            service: http://n8n.n8n-infra.svc.cluster.local:5678
+            service: http://n8n.n8n-infra.svc.cluster.local:80
           - service: http_status:404
   destination:
     server: https://kubernetes.default.svc
