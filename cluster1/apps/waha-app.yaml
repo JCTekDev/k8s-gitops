@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
     targetRevision: main
-    path: waha/overlays/cluster3
+    path: waha/overlays/cluster1
   syncPolicy:
     automated:
       prune: true
