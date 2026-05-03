@@ -1,0 +1,88 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: corteza
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: infra
+  source:
+    repoURL: https://origoss-labs.github.io/charts
+    chart: corteza
+    targetRevision: 1.0.12
+    helm:
+      valuesObject:
+        global:
+          domain: corteza.devopian.com
+          insecure: false
+
+        server:
+          replicaCount: 1
+          environment: production
+          image:
+            repository: cortezaproject/corteza
+            tag: "2024.9.8"
+            pullPolicy: IfNotPresent
+          log:
+            debug: false
+            level: warn
+          persistence:
+            enabled: true
+            storageClass: local-path
+            accessModes:
+              - ReadWriteOnce
+            size: 5Gi
+          # ingress handled by Cloudflare Tunnel (corteza.devopian.com -> corteza-server.corteza-infra:80)
+          ingress:
+            enabled: false
+
+        corredor:
+          enabled: false
+
+        # Disable chart-managed PostgreSQL; use CNPG external database
+        postgresql:
+          enabled: false
+        externalDatabase:
+          enabled: true
+          existingSecret: corteza-db-dsn
+          existingSecretPasswordKey: db-dsn
+
+        # Dedicated CNPG cluster for Corteza
+        # CNPG creates secret corteza-db-app with keys: username, password, host, dbname
+        extraManifests:
+          - apiVersion: postgresql.cnpg.io/v1
+            kind: Cluster
+            metadata:
+              name: corteza-db
+            spec:
+              instances: 1
+              bootstrap:
+                initdb:
+                  database: corteza
+                  owner: corteza
+              postgresql:
+                parameters:
+                  shared_buffers: "128MB"
+                  effective_cache_size: "256MB"
+                pg_hba:
+                  - host all all all trust
+              resources:
+                requests:
+                  memory: "512Mi"
+                limits:
+                  memory: "512Mi"
+              storage:
+                size: 2Gi
+                storageClass: local-path
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: corteza-infra
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
