@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://helm.erpnext.com
     chart: erpnext
-    targetRevision: 7.0.113
+    targetRevision: 8.0.46
     helm:
       valuesObject:
         image:
