@@ -1,0 +1,61 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frappe-crm
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: prod
+  source:
+    repoURL: https://helm.erpnext.com
+    chart: erpnext
+    targetRevision: 7.0.113
+    helm:
+      valuesObject:
+        image:
+          repository: ghcr.io/frappe/crm
+          tag: stable
+
+        # PostgreSQL via CNPG (external)
+        mariadb:
+          enabled: false
+        postgresql:
+          enabled: false
+        dbHost: postgres-cluster1-rw.postgres-infra.svc
+        dbPort: 5432
+        dbRootUser: postgres
+        dbExistingSecret: frappe-crm-passwords
+        dbExistingSecretPasswordKey: db-root-password
+
+        persistence:
+          worker:
+            enabled: true
+            size: 8Gi
+            storageClass: local-path
+          logs:
+            enabled: true
+            size: 4Gi
+            storageClass: local-path
+
+        jobs:
+          createSite:
+            enabled: true
+            siteName: crm.devopian.com
+            dbType: postgres
+            adminExistingSecret: frappe-crm-passwords
+            adminExistingSecretKey: admin-password
+            installApps:
+              - crm
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: frappe-crm-prod
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
