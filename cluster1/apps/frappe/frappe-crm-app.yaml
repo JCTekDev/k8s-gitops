@@ -33,10 +33,14 @@ spec:
             enabled: true
             size: 8Gi
             storageClass: local-path
+            accessModes:
+              - ReadWriteOnce
           logs:
             enabled: true
             size: 4Gi
             storageClass: local-path
+            accessModes:
+              - ReadWriteOnce
 
         jobs:
           createSite:
