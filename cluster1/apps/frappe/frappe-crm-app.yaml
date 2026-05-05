@@ -16,6 +16,7 @@ spec:
         image:
           repository: ghcr.io/frappe/crm
           tag: stable
+          pullPolicy: Always
 
         # PostgreSQL via CNPG (external)
         mariadb:
