@@ -38,6 +38,8 @@ spec:
             service: http://n8n.n8n-infra.svc.cluster.local:80
           - hostname: corteza.devopian.com
             service: http://corteza-server.corteza-infra.svc.cluster.local:80
+          - hostname: crm.devopian.com
+            service: http://frappe-crm-erpnext.frappe-crm-prod.svc.cluster.local:8080
           - service: http_status:404
   destination:
     server: https://kubernetes.default.svc
