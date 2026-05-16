@@ -15,7 +15,7 @@ spec:
       valuesObject:
         image:
           repository: ghcr.io/frappe/crm
-          tag: v1.71.3
+          tag: latest
           pullPolicy: Always
 
         # PostgreSQL via CNPG (external)
@@ -89,8 +89,44 @@ spec:
                 bench set-config -gp socketio_port "$SOCKETIO_PORT"
 
                 if [[ -d "sites/${SITE_NAME}" ]]; then
-                  echo "Site ${SITE_NAME} already exists"
-                  exit 0
+                  if bench --site "$SITE_NAME" list-apps >/tmp/site-check.log 2>&1; then
+                    echo "Site ${SITE_NAME} already exists and is healthy"
+                    cat /tmp/site-check.log
+                    exit 0
+                  fi
+
+                  echo "Site ${SITE_NAME} exists but is incomplete or unhealthy"
+                  cat /tmp/site-check.log
+
+                  if ! bench drop-site "$SITE_NAME" \
+                    --force \
+                    --no-backup \
+                    --db-root-username="$DB_ROOT_USER" \
+                    --db-root-password="$DB_ROOT_PASSWORD"; then
+                    echo "bench drop-site failed, falling back to manual PostgreSQL cleanup"
+
+                    DB_NAME="$(jq -r '.db_name // empty' "sites/${SITE_NAME}/site_config.json")"
+                    DB_USER="$(jq -r '.db_user // .db_name // empty' "sites/${SITE_NAME}/site_config.json")"
+
+                    rm -rf "sites/${SITE_NAME}"
+
+                    if [[ -n "$DB_NAME" ]]; then
+                      PGPASSWORD="$DB_ROOT_PASSWORD" psql \
+                        -h "$DB_HOST" \
+                        -p "$DB_PORT" \
+                        -U "$DB_ROOT_USER" \
+                        -d postgres \
+                        -v ON_ERROR_STOP=1 \
+                        -v db_name="$DB_NAME" \
+                        -v db_user="$DB_USER" <<'SQL'
+                SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = :'db_name';
+                DROP DATABASE IF EXISTS :"db_name";
+                DROP ROLE IF EXISTS :"db_user";
+                SQL
+                    fi
+                  fi
+
+                  rm -rf "sites/${SITE_NAME}"
                 fi
 
                 bench new-site "$SITE_NAME" \
@@ -100,7 +136,8 @@ spec:
                   --db-root-username="$DB_ROOT_USER" \
                   --db-root-password="$DB_ROOT_PASSWORD" \
                   --admin-password="$ADMIN_PASSWORD" \
-                  --install-app=crm
+                  --install-app=crm \
+                  --force
 
                 rm -f currentsite.txt
 
