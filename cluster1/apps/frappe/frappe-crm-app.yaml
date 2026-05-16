@@ -56,8 +56,56 @@ spec:
             whenUnsatisfiable: ScheduleAnyway
 
         jobs:
-          createSite:
+          configure:
             enabled: true
+            fixVolume: true
+            envVars:
+              - name: SITE_NAME
+                value: crm.devopian.com
+              - name: DB_ROOT_USER
+                value: postgres
+              - name: DB_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: frappe-crm-passwords
+                    key: db-root-password
+              - name: ADMIN_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: frappe-crm-passwords
+                    key: admin-password
+            args:
+              - |
+                set -euo pipefail
+
+                ls -1 apps > sites/apps.txt
+                [[ -f sites/common_site_config.json ]] || echo "{}" > sites/common_site_config.json
+
+                bench set-config -gp db_port "$DB_PORT"
+                bench set-config -g db_host "$DB_HOST"
+                bench set-config -g redis_cache "$REDIS_CACHE"
+                bench set-config -g redis_queue "$REDIS_QUEUE"
+                bench set-config -g redis_socketio "$REDIS_QUEUE"
+                bench set-config -gp socketio_port "$SOCKETIO_PORT"
+
+                if [[ -d "sites/${SITE_NAME}" ]]; then
+                  echo "Site ${SITE_NAME} already exists"
+                  exit 0
+                fi
+
+                bench new-site "$SITE_NAME" \
+                  --db-type=postgres \
+                  --db-host="$DB_HOST" \
+                  --db-port="$DB_PORT" \
+                  --db-root-username="$DB_ROOT_USER" \
+                  --db-root-password="$DB_ROOT_PASSWORD" \
+                  --admin-password="$ADMIN_PASSWORD" \
+                  --install-app=crm
+
+                rm -f currentsite.txt
+
+          createSite:
+            enabled: false
             siteName: crm.devopian.com
             dbType: postgres
             adminExistingSecret: frappe-crm-passwords
