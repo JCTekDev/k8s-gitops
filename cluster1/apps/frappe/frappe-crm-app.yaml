@@ -43,6 +43,18 @@ spec:
             accessModes:
               - ReadWriteOnce
 
+        nginx:
+          defaultTopologySpread:
+            maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: ScheduleAnyway
+
+        worker:
+          defaultTopologySpread:
+            maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: ScheduleAnyway
+
         jobs:
           createSite:
             enabled: true
