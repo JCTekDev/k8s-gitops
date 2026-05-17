@@ -10,13 +10,13 @@ spec:
   source:
     repoURL: https://helm.erpnext.com
     chart: erpnext
-    targetRevision: 8.0.46
+    targetRevision: 8.0.51
     helm:
       valuesObject:
         image:
           repository: ghcr.io/frappe/crm
-          tag: latest
-          pullPolicy: Always
+          tag: v1.71.3
+          pullPolicy: IfNotPresent
 
         mariadb:
           enabled: true
