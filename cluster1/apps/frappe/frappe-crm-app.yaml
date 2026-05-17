@@ -61,7 +61,7 @@ spec:
               - name: DB_ROOT_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: frappe-crm-mariadb-subchart
+                    name: frappe-crm-mariadb-root
                     key: mariadb-root-password
               - name: OLD_DB_ROOT_USER
                 value: postgres
@@ -180,3 +180,11 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: frappe-crm-mariadb-subchart
+      namespace: frappe-crm-prod
+      jsonPointers:
+        - /data
