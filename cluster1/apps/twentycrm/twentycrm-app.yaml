@@ -34,9 +34,8 @@ spec:
           db:
             enabled: false
 
-          externalDb:
-            enabled: true
-            # postgresConnectionString is injected from twentycrm-values-secret
+          # externalDb.enabled and postgresConnectionString are injected from twentycrm-values-secret
+          # (valuesFrom replaces valuesObject at the top-level key — keep externalDb entirely in valuesFrom)
 
           redis:
             image: redis:7-alpine
