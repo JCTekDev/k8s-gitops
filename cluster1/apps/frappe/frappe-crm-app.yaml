@@ -15,7 +15,7 @@ spec:
       valuesObject:
         image:
           repository: ghcr.io/frappe/crm
-          tag: v1.71.3
+          tag: latest
           pullPolicy: Always
 
         mariadb:
@@ -90,13 +90,24 @@ spec:
                 bench set-config -gp socketio_port "$SOCKETIO_PORT"
 
                 if [[ -d "sites/${SITE_NAME}" ]]; then
-                  if bench --site "$SITE_NAME" list-apps >/tmp/site-check.log 2>&1; then
+                  EXISTING_DB_TYPE="$(jq -r '.db_type // "mariadb"' "sites/${SITE_NAME}/site_config.json" 2>/dev/null || echo "unknown")"
+
+                  if [[ "$EXISTING_DB_TYPE" != "mariadb" ]]; then
+                    echo "Site ${SITE_NAME} uses ${EXISTING_DB_TYPE}, recreating it for MariaDB"
+                    echo "Database type mismatch" >/tmp/site-check.log
+                  elif [[ ! -d apps/crm ]]; then
+                    echo "The crm app is not available in this image, recreating after the correct image is deployed"
+                    echo "Missing crm app directory" >/tmp/site-check.log
+                  elif ! ./env/bin/python -c "import crm" >/tmp/site-check.log 2>&1; then
+                    echo "The crm app cannot be imported, recreating after the correct image is deployed"
+                  elif bench --site "$SITE_NAME" list-apps >/tmp/site-check.log 2>&1; then
                     echo "Site ${SITE_NAME} already exists and is healthy"
                     cat /tmp/site-check.log
                     exit 0
+                  else
+                    echo "Site ${SITE_NAME} exists but is incomplete or unhealthy"
                   fi
 
-                  echo "Site ${SITE_NAME} exists but is incomplete or unhealthy"
                   cat /tmp/site-check.log
 
                   if ! bench drop-site "$SITE_NAME" \
