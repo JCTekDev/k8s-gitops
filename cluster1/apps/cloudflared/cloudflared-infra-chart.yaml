@@ -39,7 +39,8 @@ spec:
           - hostname: corteza.devopian.com
             service: http://corteza-server.corteza-infra.svc.cluster.local:80
           - hostname: crm.devopian.com
-            service: http://frappe-crm-erpnext.frappe-crm-prod.svc.cluster.local:8080
+            # twentycrm-server is the service created by the AMecea chart (release: twentycrm, port: 3000)
+            service: http://twentycrm-server.twentycrm-prod.svc.cluster.local:3000
           - service: http_status:404
   destination:
     server: https://kubernetes.default.svc

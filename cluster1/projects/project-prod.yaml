@@ -12,6 +12,7 @@ spec:
     - git@github.com:JCTekDev/*
     - https://serhanekicii.github.io/openclaw-helm
     - https://helm.erpnext.com
+    - https://amecea.github.io/helm-twentycrm
   destinations:
     - server: '*'         # Any cluster registered in Argo CD
       namespace: "*-prod" # Must end with -prod

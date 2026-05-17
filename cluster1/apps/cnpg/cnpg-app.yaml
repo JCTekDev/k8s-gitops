@@ -26,3 +26,11 @@ spec:
       kind: Cluster
       jsonPointers:
         - /status
+    - group: postgresql.cnpg.io
+      kind: Database
+      jsonPointers:
+        - /status
+    - group: postgresql.cnpg.io
+      kind: Role
+      jsonPointers:
+        - /status
