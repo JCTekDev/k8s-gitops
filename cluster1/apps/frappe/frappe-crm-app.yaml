@@ -154,6 +154,11 @@ spec:
                   --install-app=crm \
                   --force
 
+                DB_USER="$(jq -r '.db_user // .db_name' "sites/${SITE_NAME}/site_config.json")"
+                DB_PASS="$(jq -r '.db_password' "sites/${SITE_NAME}/site_config.json")"
+                mysql -u"$DB_ROOT_USER" -p"$DB_ROOT_PASSWORD" -h "$DB_HOST" -P "$DB_PORT" \
+                  -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}'; GRANT ALL PRIVILEGES ON \`${DB_USER}\`.* TO '${DB_USER}'@'%'; FLUSH PRIVILEGES;"
+
                 rm -f currentsite.txt
 
           createSite:
