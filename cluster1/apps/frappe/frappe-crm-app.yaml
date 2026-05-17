@@ -85,3 +85,4 @@ spec:
       namespace: frappe-crm-prod
       jsonPointers:
         - /data
+        
