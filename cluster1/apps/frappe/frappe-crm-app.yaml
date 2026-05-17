@@ -15,19 +15,13 @@ spec:
       valuesObject:
         image:
           repository: ghcr.io/frappe/crm
-          tag: latest
+          tag: v1.71.3
           pullPolicy: Always
 
-        # PostgreSQL via CNPG (external)
         mariadb:
-          enabled: false
+          enabled: true
         postgresql:
           enabled: false
-        dbHost: postgres-cluster1-rw.postgres-infra.svc
-        dbPort: 5432
-        dbRootUser: postgres
-        dbExistingSecret: frappe-crm-passwords
-        dbExistingSecretPasswordKey: db-root-password
 
         persistence:
           worker:
@@ -63,8 +57,15 @@ spec:
               - name: SITE_NAME
                 value: crm.devopian.com
               - name: DB_ROOT_USER
-                value: postgres
+                value: root
               - name: DB_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: frappe-crm-mariadb-subchart
+                    key: mariadb-root-password
+              - name: OLD_DB_ROOT_USER
+                value: postgres
+              - name: OLD_DB_ROOT_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: frappe-crm-passwords
@@ -103,18 +104,21 @@ spec:
                     --no-backup \
                     --db-root-username="$DB_ROOT_USER" \
                     --db-root-password="$DB_ROOT_PASSWORD"; then
-                    echo "bench drop-site failed, falling back to manual PostgreSQL cleanup"
+                    echo "bench drop-site failed, falling back to manual cleanup"
 
                     DB_NAME="$(jq -r '.db_name // empty' "sites/${SITE_NAME}/site_config.json")"
                     DB_USER="$(jq -r '.db_user // .db_name // empty' "sites/${SITE_NAME}/site_config.json")"
+                    OLD_DB_HOST="$(jq -r '.db_host // empty' "sites/${SITE_NAME}/site_config.json")"
+                    OLD_DB_PORT="$(jq -r '.db_port // 5432' "sites/${SITE_NAME}/site_config.json")"
+                    OLD_DB_TYPE="$(jq -r '.db_type // empty' "sites/${SITE_NAME}/site_config.json")"
 
                     rm -rf "sites/${SITE_NAME}"
 
-                    if [[ -n "$DB_NAME" ]]; then
-                      PGPASSWORD="$DB_ROOT_PASSWORD" psql \
-                        -h "$DB_HOST" \
-                        -p "$DB_PORT" \
-                        -U "$DB_ROOT_USER" \
+                    if [[ "$OLD_DB_TYPE" == "postgres" && -n "$DB_NAME" && -n "$OLD_DB_HOST" ]]; then
+                      PGPASSWORD="$OLD_DB_ROOT_PASSWORD" psql \
+                        -h "$OLD_DB_HOST" \
+                        -p "$OLD_DB_PORT" \
+                        -U "$OLD_DB_ROOT_USER" \
                         -d postgres \
                         -v ON_ERROR_STOP=1 \
                         -v db_name="$DB_NAME" \
@@ -130,7 +134,7 @@ spec:
                 fi
 
                 bench new-site "$SITE_NAME" \
-                  --db-type=postgres \
+                  --db-type=mariadb \
                   --db-host="$DB_HOST" \
                   --db-port="$DB_PORT" \
                   --db-root-username="$DB_ROOT_USER" \
@@ -144,7 +148,7 @@ spec:
           createSite:
             enabled: false
             siteName: crm.devopian.com
-            dbType: postgres
+            dbType: mariadb
             adminExistingSecret: frappe-crm-passwords
             adminExistingSecretKey: admin-password
             installApps:
