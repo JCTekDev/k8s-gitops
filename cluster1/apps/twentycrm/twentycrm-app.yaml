@@ -1,0 +1,99 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: twentycrm
+  namespace: argocd
+  annotations:
+    # Deploy after secrets (wave 1) so the Helm valuesFrom secret exists first
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  project: prod
+  sources:
+    # Source 1: AMecea Helm chart for TwentyCRM (server + worker + bundled Redis)
+    - chart: twentycrm
+      repoURL: https://amecea.github.io/helm-twentycrm
+      targetRevision: 0.2.0
+      helm:
+        releaseName: twentycrm
+        # Sensitive values (APP_SECRET, postgresConnectionString) come from
+        # the "twentycrm-values-secret" Kubernetes Secret deployed by twentycrm-secrets app.
+        # That Secret must exist before this Application syncs (sync-wave ordering ensures this).
+        # Secret format: a "values.yaml" key containing Helm YAML with:
+        #   externalDb:
+        #     postgresConnectionString: "postgres://twenty:<PASSWORD>@postgres-cluster1-rw.postgres-infra.svc.cluster.local:5432/twenty"
+        #   env:
+        #     APP_SECRET: "<random-32-char-string>"
+        # Same password as twentycrm-db-credentials (postgres-infra), set on the twenty role via CNPG Role CRD.
+        valuesFrom:
+          - kind: Secret
+            name: twentycrm-values-secret
+            valuesKey: values.yaml
+        valuesObject:
+          image: twentycrm/twenty:v2.5.1
+
+          db:
+            enabled: false
+
+          externalDb:
+            enabled: true
+            # postgresConnectionString is injected from twentycrm-values-secret
+
+          redis:
+            image: redis:7-alpine
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "20m"
+              limits:
+                memory: "128Mi"
+
+          server:
+            replicas: 1
+            storage: 5Gi
+            storageClassName: local-path
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "200m"
+              limits:
+                memory: "1Gi"
+
+          worker:
+            replicas: 1
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "100m"
+              limits:
+                memory: "512Mi"
+
+          env:
+            STORAGE_TYPE: "local"
+            SERVER_URL: "https://crm.devopian.com"
+            FRONT_BASE_URL: "https://crm.devopian.com"
+            SIGN_IN_PREFILLED: "false"
+            ACCESS_TOKEN_EXPIRES_IN: "7d"
+            LOGIN_TOKEN_EXPIRES_IN: "1h"
+            # APP_SECRET is injected from twentycrm-values-secret
+
+          ingress:
+            # Ingress is handled by Cloudflare Tunnel (crm.devopian.com -> twentycrm-server.twentycrm-prod:3000)
+            enabled: false
+
+    # Source 2: Extensions Job (creates uuid-ossp, pg_trgm, unaccent, pgcrypto on the twenty database)
+    - repoURL: git@github.com:jctekdev/k8s-manifests-public.git
+      targetRevision: main
+      path: twentycrm
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: twentycrm-prod
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 3
