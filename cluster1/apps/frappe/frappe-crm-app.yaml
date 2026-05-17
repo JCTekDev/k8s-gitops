@@ -61,8 +61,8 @@ spec:
               - name: DB_ROOT_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: frappe-crm-mariadb-root
-                    key: mariadb-root-password
+                    name: frappe-crm-passwords
+                    key: db-root-password
               - name: OLD_DB_ROOT_USER
                 value: postgres
               - name: OLD_DB_ROOT_PASSWORD
