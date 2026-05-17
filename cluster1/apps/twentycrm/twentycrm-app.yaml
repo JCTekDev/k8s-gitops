@@ -67,6 +67,16 @@ spec:
               limits:
                 memory: "512Mi"
 
+          # Chart default parses secrets as null (all subkeys are commented out),
+          # causing a nil pointer error in secret-tokens.yaml template.
+          # TwentyCRM v2.x derives all tokens from APP_SECRET — these are unused.
+          secrets:
+            appToken: ""
+            accessToken: ""
+            loginToken: ""
+            refreshToken: ""
+            fileToken: ""
+
           env:
             STORAGE_TYPE: "local"
             SERVER_URL: "https://crm.devopian.com"
