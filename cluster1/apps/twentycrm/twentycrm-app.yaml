@@ -64,7 +64,7 @@ spec:
                 memory: "256Mi"
                 cpu: "100m"
               limits:
-                memory: "512Mi"
+                memory: "1Gi"
 
           # Chart default parses secrets as null (all subkeys are commented out),
           # causing a nil pointer error in secret-tokens.yaml template.
@@ -77,6 +77,7 @@ spec:
             fileToken: ""
 
           env:
+            NODE_OPTIONS: "--max-old-space-size=768"
             STORAGE_TYPE: "local"
             SERVER_URL: "https://crm.devopian.com"
             FRONT_BASE_URL: "https://crm.devopian.com"
