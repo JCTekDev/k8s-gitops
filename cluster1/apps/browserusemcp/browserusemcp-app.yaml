@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: browserusemcp
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: browserusemcp
+spec:
+  project: infra
+  source:
+    repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
+    targetRevision: main
+    path: browserusemcp
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: browserusemcp-infra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
