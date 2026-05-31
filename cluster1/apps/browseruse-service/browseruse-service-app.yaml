@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: browserusemcp
+  name: browseruse-service
   namespace: argocd
   labels:
-    app.kubernetes.io/name: browserusemcp
+    app.kubernetes.io/name: browseruse-service
 spec:
   project: infra
   source:
     repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
     targetRevision: main
-    path: browserusemcp
+    path: browseruse-service
   destination:
     server: https://kubernetes.default.svc
-    namespace: browserusemcp-infra
+    namespace: browseruse-service-infra
   syncPolicy:
     automated:
       prune: true
