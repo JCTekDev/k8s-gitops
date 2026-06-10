@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@github.com:jctekdev/k8s-manifests-private.git
     targetRevision: main
-    path: liquibase-insights/cluster1
+    path: liquibase-insights
   destination:
     server: https://kubernetes.default.svc
     namespace: liquibase-insights-infra
