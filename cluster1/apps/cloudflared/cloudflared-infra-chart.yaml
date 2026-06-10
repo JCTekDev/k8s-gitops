@@ -40,6 +40,8 @@ spec:
             service: http://corteza-server.corteza-infra.svc.cluster.local:80
           - hostname: crm.devopian.com
             service: http://frappe-crm-erpnext.frappe-crm-prod.svc.cluster.local:8080
+          - hostname: liquibase-insights.devopian.com
+            service: http://insights-nginx.liquibase-insights-infra.svc.cluster.local:80
           - service: http_status:404
   destination:
     server: https://kubernetes.default.svc

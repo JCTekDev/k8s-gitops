@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: liquibase-insights
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: infra
+  source:
+    repoURL: git@github.com:jctekdev/k8s-manifests-private.git
+    targetRevision: main
+    path: liquibase-insights/cluster1
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: liquibase-insights-infra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 3
