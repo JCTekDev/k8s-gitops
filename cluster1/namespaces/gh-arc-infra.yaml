@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gh-arc-infra
+  labels:
+    # Enable Pod Security Admission at "privileged" level
+    # Required for the docker:dind sidecar to run in privileged mode.
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/audit-version: latest
+    pod-security.kubernetes.io/warn: privileged
+    pod-security.kubernetes.io/warn-version: latest
+  annotations:
+    # Optional: documents the namespace purpose
+    purpose: "ARC runners with containerMode dind (Docker-in-Docker) and kubernetes"
+    owner: "platform-team"
