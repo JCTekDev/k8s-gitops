@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: oracle-db-free
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: dev
+  source:
+    repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
+    targetRevision: main
+    path: oracle
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: oracle-db-free-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 3
