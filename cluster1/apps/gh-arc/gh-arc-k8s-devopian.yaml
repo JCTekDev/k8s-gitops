@@ -16,26 +16,28 @@ spec:
     chart: gha-runner-scale-set
     targetRevision: "0.12.1"
     helm:
-      values: |
-        githubConfigUrl: https://github.com/JCTekDev/liq-r2-demo
+      valuesObject:
+        githubConfigUrl: https://github.com/devopian
         githubConfigSecret: gh-actions-app-credentials
-        runnerScaleSetName: cluster3-arc-k8s
+        runnerScaleSetName: cluster1-arc-k8s-devopian
         minRunners: 1
         maxRunners: 3
+        runnerScaleSetLabels:
+          - arc-k8s
         containerMode:
           type: "kubernetes"
-          # type: "dind"    
+          # type: "dind"
           kubernetesModeWorkVolumeClaim:
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
-                storage: 10Gi   
+                storage: 10Gi
             # storageClassName: standard
         # (optional but helpful) set a short idle time so runners go away quickly
         runnerIdleTimeSeconds: 120
         # Let the chart create the RBAC/SA it needs for kubernetes mode
         kubernetesModeRBAC:
-            create: true
+          create: true
         controllerServiceAccount:
           name: gh-arc-controller-gha-rs-controller
           namespace: gh-arc-infra
