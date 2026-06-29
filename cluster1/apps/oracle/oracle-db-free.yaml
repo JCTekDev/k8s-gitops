@@ -7,6 +7,13 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   project: dev
+  ignoreDifferences:
+    - group: apps
+      kind: StatefulSet
+      name: oracle-db-free
+      namespace: oracle-db-free-dev
+      jsonPointers:
+        - /spec/volumeClaimTemplates/0/status
   source:
     repoURL: git@github.com:JCTekDev/k8s-manifests-public.git
     targetRevision: main
@@ -20,5 +27,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
   revisionHistoryLimit: 3
